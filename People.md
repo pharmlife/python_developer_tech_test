@@ -6,19 +6,19 @@
     * A x-api-token must be provided in the headers for EVERY endpoint but /status. If the user doesn't provide any token, you should return a 401 status code. You can assume any value provided is a valid token.
 
   * [Data Endpoints](#data-endpoints)  
-    - [/people](#people)
+    - [/person](#person)
         - [GET](#list-people)  
         - [POST](#create-person)  
         - [DELETE](#delete-person)  
-    - [/people/<person:id>/alias](#aliases)  
+    - [/person/<person:id>/alias](#aliases)  
         - [POST](#create-alias)  
         - [GET](#list-aliases)  
     - [/status](#status)
 
-### people
+### person
 
-#### List people
-* **URI** : `/people`
+#### List persons
+* **URI** : `/person`
 * **METHODS** : `GET`
 * **REQUIRED HEADERS**:
     - `x-api-key: <auth token>`
@@ -29,10 +29,10 @@
     * **CODE**: 401
     * **TEXT**: `{"error": "Authorization required"}`
 * **SAMPLE CALL**  
-`curl -x GET ${SERVER}/people -H 'x-api-key: ${TOKEN}'`
+`curl -x GET ${SERVER}/person -H 'x-api-key: ${TOKEN}'`
 
 #### Create person
-* **URI** : `/people`
+* **URI** : `/person`
 * **METHODS** : `POST`
 * **CONTENT-TYPE**: `JSON`
 * **REQUIRED PARAMS**:
@@ -52,10 +52,10 @@
     * **CODE**: 409
     * **TEXT**: `{"error": "Name exists"}`  
 * **SAMPLE CALL**  
-`curl ${SERVER}/people -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json -d {"name": ${NAME} }`
+`curl ${SERVER}/person -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json -d {"name": ${NAME} }`
 
 #### Delete person
-* **URI** : `/people/<int:person id>`
+* **URI** : `/person/<int:person id>`
 * **METHODS** : `DELETE`
 * **REQUIRED HEADERS**:
     - `x-api-key: <auth token>`
@@ -69,13 +69,13 @@
     * **CODE**: 404
     * **TEXT**: `{"error": "Not Found"}`
 * **SAMPLE CALL**  
-`curl ${SERVER}/people/${OWNER ID} -X DELETE -H 'x-api-key: ${TOKEN}'`
+`curl ${SERVER}/person/${OWNER ID} -X DELETE -H 'x-api-key: ${TOKEN}'`
 
 
 ### Aliases
 
 #### List Aliases
-* **URI** : `/people/<int person>/alias`
+* **URI** : `/person/<int person>/alias`
 * **METHODS** : `GET`
 * **REQUIRED HEADERS**:
     - `x-api-key: <auth token>`
@@ -86,10 +86,10 @@
     * **CODE**: 401
     * **TEXT**: `{"error": "Unauthorised"}`
 * **SAMPLE CALL**  
-`curl ${SERVER}/people/1/aliases -H 'x-api-key: ${TOKEN}'`
+`curl ${SERVER}/person/1/aliases -H 'x-api-key: ${TOKEN}'`
 
 #### Create Alias
-* **URI** : `/people/<int person>/alias`
+* **URI** : `/person/<int person>/alias`
 * **METHODS** : `POST`
 * **CONTENT-TYPE**: `JSON`
 * **REQUIRED PARAMS**:
@@ -111,7 +111,7 @@
     * **CODE**: 409
     * **TEXT**: `{"error": "Name exists"}`  
 * **SAMPLE CALL**  
-`curl ${SERVER}/cats -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json -d {"name": ${NAME} }`
+`curl ${SERVER}/person/1/alias -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json -d {"name": ${NAME} }`
 
 
 ### Status
