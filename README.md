@@ -6,7 +6,7 @@ The test should only take an hour or two.
 
 # The task ... "People and its aliases".
 
-In the same folder as this one you will find an service specification for the Peoples API.
+In the same folder as this one you will find an service specification for the Peoples API (People.md).
 
 For this technical test you need to implement a python flask application which implements the specification of the API.
 
