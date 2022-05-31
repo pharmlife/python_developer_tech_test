@@ -1,7 +1,7 @@
 # Welcome to the People's API specification
 
   * [Storage]
-    * You are free to choose how to storage persistent data. As way to help, a basic SQLite database implementation has been included in this repository.
+    * You are free to choose how to store persistent data. As way to help, a basic SQLite database implementation has been included in this repository.
   * [Authentication Endpoints] 
     * A x-api-token must be provided in the headers for EVERY endpoint but /status. If the user doesn't provide any token, you should return a 401 status code. You can assume any value provided is a valid token.
 
@@ -35,8 +35,8 @@
 * **URI** : `/person`
 * **METHODS** : `POST`
 * **CONTENT-TYPE**: `JSON`
-* **REQUIRED PARAMS**:
-    - `name=[string]`
+* **REQUIRED REQUEST BODY**:
+    - `{"name": [string]}`
 * **REQUIRED HEADERS**:
     - `x-api-key: <auth token>`
 * **SUCCESS RESPONSE**
@@ -92,11 +92,9 @@
 * **URI** : `/person/<int person>/alias`
 * **METHODS** : `POST`
 * **CONTENT-TYPE**: `JSON`
-* **REQUIRED PARAMS**:
-    - `name=[string]`
+* **REQUIRED REQUEST BODY**:
+    - `{"name": [string]}`
 * **REQUIRED HEADERS**:
-    - `Cookie: <auth token>`  
-    OR
     - `x-api-key: <auth token>`
 * **SUCCESS RESPONSE**
     * **CODE**: 201
