@@ -29,7 +29,7 @@
     * **CODE**: 401
     * **TEXT**: `{"error": "Authorization required"}`
 * **SAMPLE CALL**  
-`curl -x GET ${SERVER}/person -H 'x-api-key: ${TOKEN}'`
+`curl ${SERVER}/person -H 'x-api-key: ${TOKEN}'`
 
 #### Create person
 * **URI** : `/person`
