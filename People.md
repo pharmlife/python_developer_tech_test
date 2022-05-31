@@ -52,7 +52,7 @@
     * **CODE**: 409
     * **TEXT**: `{"error": "Name exists"}`  
 * **SAMPLE CALL**  
-`curl ${SERVER}/person -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json' -d {"name": ${NAME} }`
+`curl ${SERVER}/person -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json' -d '{"name": ${NAME} }'`
 
 #### Delete person
 * **URI** : `/person/<int:person id>`
@@ -103,13 +103,13 @@
     * **CODE**: 400
     * **TEXT**: `{"error": "Names must be alphanumeric"}`  
     OR  
-    * **CODE**: 403
+    * **CODE**: 401
     * **TEXT**: `{"error": "Unauthorised"}`  
     OR  
     * **CODE**: 409
     * **TEXT**: `{"error": "Name exists"}`  
 * **SAMPLE CALL**  
-`curl ${SERVER}/person/1/alias -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json' -d {"name": ${NAME} }`
+`curl ${SERVER}/person/1/alias -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json' -d '{"name": ${NAME} }'`
 
 
 ### Status
