@@ -35,7 +35,7 @@ def add_person(name):
 def delete_person(id):
     con = sqlite3.connect(FILENAME)
     cur = con.cursor()
-    result = cur.execute("DELETE FROM person where id = ?", (id))
+    result = cur.execute("DELETE FROM person where id = ?", (id,))
     deleted = result.rowcount
     con.commit()
     con.close()
