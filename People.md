@@ -10,9 +10,6 @@
         - [GET](#list-people)  
         - [POST](#create-person)  
         - [DELETE](#delete-person)  
-    - [/person/<person:id>/alias](#aliases)  
-        - [POST](#create-alias)  
-        - [GET](#list-aliases)  
     - [/status](#status)
 
 ### person
@@ -70,47 +67,6 @@
     * **TEXT**: `{"error": "Not Found"}`
 * **SAMPLE CALL**  
 `curl ${SERVER}/person/${OWNER ID} -X DELETE -H 'x-api-key: ${TOKEN}'`
-
-
-### Aliases
-
-#### List Aliases
-* **URI** : `/person/<int person>/alias`
-* **METHODS** : `GET`
-* **REQUIRED HEADERS**:
-    - `x-api-key: <auth token>`
-* **SUCCESS RESPONSE**
-    * **CODE**: 200
-    * **TEXT**: `[<name>, ...]`
-* **FAILURE RESPONSE**
-    * **CODE**: 401
-    * **TEXT**: `{"error": "Unauthorised"}`
-* **SAMPLE CALL**  
-`curl ${SERVER}/person/1/aliases -H 'x-api-key: ${TOKEN}'`
-
-#### Create Alias
-* **URI** : `/person/<int person>/alias`
-* **METHODS** : `POST`
-* **CONTENT-TYPE**: `JSON`
-* **REQUIRED REQUEST BODY**:
-    - `{"name": [string]}`
-* **REQUIRED HEADERS**:
-    - `x-api-key: <auth token>`
-* **SUCCESS RESPONSE**
-    * **CODE**: 201
-    * **TEXT**: `{"id": <new id>}`
-* **FAILURE RESPONSE**
-    * **CODE**: 400
-    * **TEXT**: `{"error": "Names must be alphanumeric"}`  
-    OR  
-    * **CODE**: 401
-    * **TEXT**: `{"error": "Unauthorised"}`  
-    OR  
-    * **CODE**: 409
-    * **TEXT**: `{"error": "Name exists"}`  
-* **SAMPLE CALL**  
-`curl ${SERVER}/person/1/alias -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json' -d '{"name": ${NAME} }'`
-
 
 ### Status
 
