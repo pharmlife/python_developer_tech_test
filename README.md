@@ -4,7 +4,7 @@ The purpose of this test is to enable candidates to demonstrate some of their py
 
 The test should only take an hour or two.
 
-# The task ... "People and its aliases".
+# The task ... "A collection of People".
 
 In the same folder as this one you will find an service specification for the Peoples API (People.md).
 
