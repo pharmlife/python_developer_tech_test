@@ -21,7 +21,7 @@
     - `x-api-key: <auth token>`
 * **SUCCESS RESPONSE**
     * **CODE**: 200
-    * **TEXT**: `[{"id":<owner id>, "name": <owner name>}, ...]`
+    * **TEXT**: `{"<owner id>": {"name": <owner name>}, ...]`
 * **FAILURE RESPONSE**
     * **CODE**: 401
     * **TEXT**: `{"error": "Authorization required"}`
