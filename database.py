@@ -75,6 +75,7 @@ def delete_person(id):
 def get_db_status():
     """
     Returns the status of the database. For simplicity, it only checks if the database file exists
+    
     :return True if the database status is correct. False otherwise
     """
     return os.path.exists(FILENAME)
