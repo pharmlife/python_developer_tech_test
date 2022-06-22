@@ -61,7 +61,7 @@ def delete_person(id):
     Deletes a person by id.
 
     :param: id: The person id to delete
-    :return: True if the person exists and has been deleted. False otherwise
+    :return: True if the person existed and has been succesfully deleted. False otherwise
     """
     con = sqlite3.connect(FILENAME)
     cur = con.cursor()
