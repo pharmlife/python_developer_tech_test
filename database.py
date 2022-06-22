@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 FILENAME = "database.db"
 
@@ -42,6 +43,7 @@ def get_people():
 def add_person(name):
     """
     Add a person in the collection given a name.
+    
     :param: name: The name of the new person to add
     :return: The id of the new person
     """
