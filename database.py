@@ -5,7 +5,7 @@ FILENAME = "database.db"
 
 def ensure_tables_are_created():
     """
-    Initialize the database. This method should be called at least once before actually using it.
+    Initialize the database. This method should be called at least once before actually using the database.
     Can safely be called multiple times if necessary.
     """
     con = sqlite3.connect(FILENAME)
