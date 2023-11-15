@@ -15,9 +15,9 @@ def add_person(name: str) -> (Response, int):
         return jsonify({"error": err_msg}), 409
 
     new_id = database.add_person(name)
-    response = jsonify({"id": str(new_id), "name": name}), 200
+    response = jsonify({"id": str(new_id), "name": name})
 
-    return jsonify(response), 200
+    return response, 200
 
 
 def delete_person(pid: int):
