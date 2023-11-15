@@ -1,19 +1,7 @@
 from flask import Flask, request, jsonify
+import access as database_access
 
 app = Flask(__name__)
-
-db = [
-        {
-            "id": 0,
-            "name": "Test Name A"
-        },
-        {
-            "id": 1,
-            "name": "Test Name B"
-        }
-    ]
-
-db_active = True
 
 
 def authenticate_request():
@@ -33,7 +21,9 @@ def get_persons():
     if auth_response:
         return auth_response
 
-    return jsonify(db), 200
+    response, code = database_access.request_person_data()
+
+    return response, code
 
 
 @app.route('/person', methods=['POST'])
@@ -55,13 +45,9 @@ def create_person():
     if not data["name"].isalnum():
         return jsonify({"error": "Names must be alphanumeric"}), 400
 
-    new_id = len(db) + 1
-    new_name = str(data["name"])
-    new_person = {"id": new_id, "name": new_name}
+    response, code = database_access.add_person(data["name"])
 
-    db.append(new_person)
-
-    return jsonify(new_person), 201
+    return response, code
 
 
 @app.route('/person/<int:person_id>', methods=['DELETE'])
@@ -75,12 +61,9 @@ def delete_person(person_id):
     if auth_response:
         return auth_response
 
-    ids = [_["id"] for _ in db]
+    response, code = database_access.delete_person(person_id)
 
-    if str(person_id) not in ids:
-        return jsonify({"error": "Not Found"}), 404
-
-    return '', 204
+    return response, code
 
 
 @app.route('/status', methods=['GET'])
@@ -90,10 +73,9 @@ def get_status():
     `curl ${SERVER}/status`
 
     """
-    if db_active:
-        return jsonify({"msg": "Ok"}), 200
+    response, code = database_access.check_status()
 
-    return jsonify({"error": "Database is inactive"}), 500
+    return response, code
 
 
 if __name__ == '__main__':
