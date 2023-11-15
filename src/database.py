@@ -1,7 +1,28 @@
 import sqlite3
 import os
+import pandas as pd
 
 FILENAME = "database.db"
+
+
+def create_test_database_file(filename="database.db"):
+    """
+    Create a test database file.
+
+    """
+    database = [
+        (
+            1,
+            "Test Name A"
+        ),
+        (
+            2,
+            "Test Name B"
+        )
+    ]
+
+    df = pd.DataFrame(database)
+    df.to_csv(filename)
 
 
 def ensure_tables_are_created():
