@@ -6,36 +6,53 @@ def request_person_data() -> (Response, int):
     raw_data = database.get_people()
     formatted_data = _format_data(raw_data)
 
-    return jsonify(formatted_data), 200
+    response = jsonify(formatted_data)
+
+    return response
 
 
 def add_person(name: str) -> (Response, int):
     if _name_exists(name):
         err_msg = f"Name {name} exists."
-        return jsonify({"error": err_msg}), 409
+        response = jsonify({"error": err_msg})
+        response.status_code = 409
+
+        return response
 
     new_id = database.add_person(name)
     response = jsonify({"id": str(new_id), "name": name})
+    response.status_code = 201
 
-    return response, 200
+    return response
 
 
 def delete_person(pid: int):
-    if _id_exists(pid):
-        return jsonify({"error": "Not Found"}), 404
+    if not _id_exists(pid):
+        response = jsonify({"error": "Not Found"})
+        response.status_code = 404
+        return response
 
     database.delete_person(pid)
 
-    return jsonify({}), 204
+    response = jsonify('null')
+    response.status_code = 204
+
+    return response
 
 
 def check_status():
     active = database.get_db_status()
 
-    if active:
-        return jsonify({"msg": "Ok"}), 200
+    if not active:
+        response = jsonify({"error": "Database is not active"})
+        response.status_code = 500
 
-    return jsonify({"error": "Database is not active"}), 500
+        return response
+
+    response = jsonify({"msg": "Ok"})
+    response.status_code = 200
+
+    return response
 
 
 def _access_name_data():

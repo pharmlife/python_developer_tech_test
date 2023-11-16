@@ -1,7 +1,10 @@
 from flask import Flask, request
+import database
 import access as database_access
 import validate
 
+
+database.ensure_tables_are_created()
 app = Flask(__name__)
 
 
@@ -12,13 +15,13 @@ def get_persons():
     `curl ${SERVER}/person -H 'x-api-key: ${TOKEN}'`
 
     """
-    token_error = _validate_request_token()
-    if token_error:
-        return token_error
+    token_error_response = _validate_request_token()
+    if token_error_response:
+        return token_error_response
 
-    response, code = database_access.request_person_data()
+    response = database_access.request_person_data()
 
-    return response, code
+    return response
 
 
 @app.route('/person', methods=['POST'])
@@ -37,9 +40,9 @@ def create_person():
         return data_error
 
     name = request.get_json()["name"]
-    response, code = database_access.add_person(name)
+    response = database_access.add_person(name)
 
-    return response, code
+    return response
 
 
 @app.route('/person/<int:person_id>', methods=['DELETE'])
@@ -53,9 +56,9 @@ def delete_person(person_id):
     if token_error:
         return token_error
 
-    response, code = database_access.delete_person(person_id)
+    response = database_access.delete_person(person_id)
 
-    return response, code
+    return response
 
 
 @app.route('/status', methods=['GET'])
@@ -65,25 +68,25 @@ def get_status():
     `curl ${SERVER}/status`
 
     """
-    response, code = database_access.check_status()
+    response = database_access.check_status()
 
-    return response, code
+    return response
 
 
 def _validate_request_token():
     token = request.headers.get("x-api-key")
-    response, code = validate.check_token(token)
+    response = validate.check_token(token)
 
-    if code != 200:
-        return response, code
+    if response.status_code != 200:
+        return response
 
 
 def _validate_user_data():
     name_data = request.get_json()
-    response, code = validate.check_name_data(name_data)
+    response = validate.check_name_data(name_data)
 
-    if code != 200:
-        return response, code
+    if response.status_code != 200:
+        return response
 
 
 if __name__ == '__main__':
