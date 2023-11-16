@@ -1,4 +1,25 @@
+from typing import Optional
 from flask import jsonify, request, Response
+
+
+def try_read_token() -> Optional[str]:
+    """
+    Try and read the token data from the current flask.Request.
+
+    :return: A string containing the token data if it is read successfully. Otherwise, None.
+
+    """
+    return request.headers.get("x-api-key") or None
+
+
+def try_read_name() -> Optional[str]:
+    """
+    Try and read the token data from the current flask.Request.
+
+    :return: A string containing the name data if it is read successfully. Otherwise, None.
+
+    """
+    return request.get_json()["name"] or None
 
 
 def check_token_valid() -> Response:
@@ -8,8 +29,7 @@ def check_token_valid() -> Response:
 
     """
     response = jsonify([])
-
-    token = request.headers.get("x-api-key") or None
+    token = try_read_token()
 
     if not token:
         response = jsonify({"error": "Authorization required"})

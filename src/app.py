@@ -47,7 +47,7 @@ def create_person() -> Response:
     if name_response.status_code != 200:
         return name_response
 
-    name = request.get_json()["name"]
+    name = input.try_read_name()
     response = database_access.add_person(name)
 
     return response
