@@ -1,7 +1,7 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 import database
 import access as database_access
-import validate
+import input
 
 
 database.ensure_tables_are_created()
@@ -9,15 +9,19 @@ app = Flask(__name__)
 
 
 @app.route('/person', methods=['GET'])
-def get_persons():
+def get_persons() -> Response:
     """
+    Request a list of persons from the database.
+
+    :return: A flask.Response indicating if the request was successful.
+
     Example usage:
     `curl ${SERVER}/person -H 'x-api-key: ${TOKEN}'`
 
     """
-    token_error_response = _validate_request_token()
-    if token_error_response:
-        return token_error_response
+    token_response = input.check_token_valid()
+    if token_response.status_code != 200:
+        return token_response
 
     response = database_access.request_person_data()
 
@@ -25,19 +29,23 @@ def get_persons():
 
 
 @app.route('/person', methods=['POST'])
-def create_person():
+def create_person() -> Response:
     """
+    Add a person to the database. Will fail if the name data already exists.
+
+    :return: A flask.Response indicating if the request was successful.
+
     Example usage:
     `curl ${SERVER}/person -H 'x-api-key: ${TOKEN}' -H 'Content-Type: application/json' -d '{"name": ${NAME} }'`
 
     """
-    token_error = _validate_request_token()
-    if token_error:
-        return token_error
+    token_response = input.check_token_valid()
+    if token_response.status_code != 200:
+        return token_response
 
-    data_error = _validate_user_data()
-    if data_error:
-        return data_error
+    name_response = input.check_name_valid()
+    if name_response.status_code != 200:
+        return name_response
 
     name = request.get_json()["name"]
     response = database_access.add_person(name)
@@ -46,15 +54,19 @@ def create_person():
 
 
 @app.route('/person/<int:person_id>', methods=['DELETE'])
-def delete_person(person_id):
+def delete_person(person_id: int) -> Response:
     """
+    Delete a person from the database by person id (pid). Will fail if the provided pid does not already exist.
+
+    :return: A flask.Response indicating if the request was successful.
+
     Example usage:
     `curl ${SERVER}/person/${OWNER ID} -X DELETE -H 'x-api-key: ${TOKEN}'`
 
     """
-    token_error = _validate_request_token()
-    if token_error:
-        return token_error
+    token_response = input.check_token_valid()
+    if token_response.status_code != 200:
+        return token_response
 
     response = database_access.delete_person(person_id)
 
@@ -62,8 +74,12 @@ def delete_person(person_id):
 
 
 @app.route('/status', methods=['GET'])
-def get_status():
+def get_status() -> Response:
     """
+    Request the status of the database.
+
+    :return: A flask.Response indicating whether the database is active.
+
     Example usage:
     `curl ${SERVER}/status`
 
@@ -71,22 +87,6 @@ def get_status():
     response = database_access.check_status()
 
     return response
-
-
-def _validate_request_token():
-    token = request.headers.get("x-api-key")
-    response = validate.check_token(token)
-
-    if response.status_code != 200:
-        return response
-
-
-def _validate_user_data():
-    name_data = request.get_json()
-    response = validate.check_name_data(name_data)
-
-    if response.status_code != 200:
-        return response
 
 
 if __name__ == '__main__':

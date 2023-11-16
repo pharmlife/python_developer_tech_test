@@ -31,7 +31,7 @@ def test_get_persons(client, set_up_database):
     data = response.get_json()
 
     assert response.status_code == 200
-    assert data == [{'id': '1', 'name': 'TestPerson'}]
+    assert data == [{'id': 1, 'name': 'TestPerson'}]
 
 
 def test_get_persons_without_token(client, set_up_database):
