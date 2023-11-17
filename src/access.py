@@ -63,7 +63,7 @@ def add_person(name: str) -> Response:
         return response
 
     new_id = database.add_person(name)
-    response = jsonify({"id": str(new_id), "name": name})
+    response = jsonify({"id": new_id, "name": name})
     response.status_code = 201
 
     return response

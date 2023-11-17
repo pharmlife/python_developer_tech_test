@@ -51,7 +51,7 @@ def test_create_person(client, set_up_database):
     data = response.get_json()
 
     assert response.status_code == 201
-    assert data == {'id': '2', 'name': 'NewPerson'}
+    assert data == {'id': 2, 'name': 'NewPerson'}
 
     people = database.get_people()
     assert len(people) == 2
@@ -86,6 +86,22 @@ def test_create_person_with_non_alphanumeric_name(client, set_up_database):
     assert len(people) == 1
 
 
+def test_create_person_with_existing_name(client, set_up_database):
+    existing_person_data = {"name": "TestPerson"}
+
+    new_person_data = json.dumps(existing_person_data)
+
+    response = client.post('/person', headers={'x-api-key': 'valid_token_1'},
+                           content_type='application/json', data=new_person_data)
+    data = response.get_json()
+
+    assert response.status_code == 409
+    assert data == {'error': 'Name exists'}
+
+    people = database.get_people()
+    assert len(people) == 1
+
+
 def test_delete_person(client, set_up_database):
     client = app.test_client()
     response = client.delete('/person/1', headers={'x-api-key': 'valid_token_1'})
@@ -112,19 +128,19 @@ def test_delete_person_not_found(client, set_up_database):
     response = client.delete('/person/999', headers={'x-api-key': 'valid_token_1'})
     data = response.get_json()
 
-    assert data == {"error": "Not Found"}
     assert response.status_code == 404
+    assert data == {"error": "Not Found"}
 
 
-def test_status_database_exists(client, set_up_database):
+def test_status_when_active(client, set_up_database):
     response = client.get('/status')
     data = response.get_json()
 
-    assert data == {"msg": "Ok"}
     assert response.status_code == 200
+    assert data == {"msg": "Ok"}
 
 
-def test_status_database_does_not_exist(client):
+def test_status_database_when_not_active(client):
     import os
 
     if os.path.exists("database.db"):
@@ -133,5 +149,5 @@ def test_status_database_does_not_exist(client):
     response = client.get('/status')
     data = response.get_json()
 
-    assert data == {"error": "Database is not active"}
     assert response.status_code == 500
+    assert data == {"error": "Database is not active"}
