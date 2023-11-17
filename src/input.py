@@ -7,17 +7,15 @@ def try_read_token() -> Optional[str]:
     Try and read the token data from the current flask.Request.
 
     :return: A string containing the token data if it is read successfully. Otherwise, None.
-
     """
     return request.headers.get("x-api-key") or None
 
 
 def try_read_name() -> Optional[str]:
     """
-    Try and read the token data from the current flask.Request.
+    Try and read the name data from the JSON payload of the current flask.Request.
 
     :return: A string containing the name data if it is read successfully. Otherwise, None.
-
     """
     return request.get_json()["name"] or None
 
@@ -25,10 +23,11 @@ def try_read_name() -> Optional[str]:
 def check_token_valid() -> Response:
     """
     Check whether the token associated with a user request is valid.
-    :return: A flask.Response. If the token is valid the status_code will be 200. Otherwise, it will be 401.
 
+    :return: A flask.Response. If the token is valid the status_code will be 200. Otherwise, it will be 401 and the data
+    will contain an error message.
     """
-    response = jsonify([])
+    response = jsonify('null')
     token = try_read_token()
 
     if not token:
@@ -38,13 +37,14 @@ def check_token_valid() -> Response:
     return response
 
 
-def check_name_valid():
+def check_name_valid() -> Response:
     """
     Check whether the name data associated with a user request is valid.
-    :return: A flask.Response. If the name data is valid the status_code will be 200. Otherwise, it will be 400.
 
+    :return: A flask.Response. If the name data is valid the status_code will be 200. Otherwise, it will be 400 and the
+    data will contain an error message.
     """
-    response = jsonify([])
+    response = jsonify('null')
 
     person_data = request.get_json()
     name_ok = "name" in person_data and person_data["name"].isalnum()

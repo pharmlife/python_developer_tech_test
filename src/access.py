@@ -10,18 +10,17 @@ def request_person_data() -> Response:
 
     response.get_json() =
     [
-            {
-                "id": 1,
-                "name": "Jane"
-            }
-            {
-                "id": 2,
-                "name": "John"
-            }
+        {
+            "id": 1,
+            "name": "Jane"
+        },
+        {
+            "id": 2,
+            "name": "John"
+        }
     ]
 
     If the database is empty, response.get_json() will return an empty list.
-
     """
     raw_data = database.get_people()
     formatted_data = _format_data(raw_data)
@@ -31,13 +30,12 @@ def request_person_data() -> Response:
     return response
 
 
-def check_person_exists(name: str) -> bool:
+def check_person_name_exists(name: str) -> bool:
     """
     Check whether a name already exists in the database.
 
-    :param: name: The name of the person to check.
+    :param name: The name of the person to check.
     :return: True if the name is found, False if not.
-
     """
     existing_names = _access_name_data()
 
@@ -48,16 +46,15 @@ def add_person(name: str) -> Response:
     """
     Add a new person to the database. The code will first check if the person exists before adding.
 
-    :param: name: The name of the person to add.
+    :param name: The name of the person to add.
     :return: A flask.Response containing the id and name of the new entry, and status code of 201. For example -
 
     response.get_json() = {"id": 1, "name": "Jane"}
     response.status_code = 201
 
     If the name already exists, the status code will be 409 and the data will contain an error message.
-
     """
-    person_exists = check_person_exists(name)
+    person_exists = check_person_name_exists(name)
 
     if person_exists:
         response = jsonify({"error": "Name exists"})
@@ -72,38 +69,35 @@ def add_person(name: str) -> Response:
     return response
 
 
-def check_pid_exists(pid: int):
+def check_person_id_exists(person_id: int) -> bool:
     """
-    Check whether an id associated with a person (pid) already exists in the database.
+    Check whether a person_id already exists in the database.
 
-    :param: id: The person id to check.
+    :param person_id: The person id to check.
     :return: True if the person id is found, False if not.
-
     """
+    existing_ids = _access_person_id_data()
 
-    existing_pids = _access_pid_data()
-
-    return pid in existing_pids
+    return person_id in existing_ids
 
 
-def delete_person(pid: int):
+def delete_person(person_id: int) -> Response:
     """
-    Delete a person from the database by providing their associated id (pid). The code will first check if the person id
-    exists before trying to delete.
+    Delete a person from the database by providing their associated person_id. The code will first check if the
+    person_id exists before trying to delete.
 
-    :param: pid: The id associated with the person.
-    :return: A flask.Response with a status code of 204 if deletion is successful. If the id cannot be found, the status
-    code will be 404 and the data will contain an error message.
-
+    :param person_id: The id associated with the person.
+    :return: A flask.Response with a status code of 204 if deletion is successful. If the person_id cannot be found, the
+    status code will be 404 and the data will contain an error message.
     """
-    pid_exists = check_pid_exists(pid)
+    id_exists = check_person_id_exists(person_id)
 
-    if not pid_exists:
+    if not id_exists:
         response = jsonify({"error": "Not Found"})
         response.status_code = 404
         return response
 
-    database.delete_person(pid)
+    database.delete_person(person_id)
     response = jsonify('null')
     response.status_code = 204
 
@@ -130,34 +124,40 @@ def check_status() -> Response:
     return response
 
 
-def _access_name_data():
+def _access_name_data() -> list:
+    """
+    Access the names from the raw database data.
+
+    :return: A list of names.
+    """
     raw_data = database.get_people()
     names = [_[1] for _ in raw_data]
 
     return names
 
 
-def _access_pid_data():
+def _access_person_id_data() -> list:
+    """
+    Access the person ids from the raw database data.
+
+    :return: A list of person ids.
+    """
     raw_data = database.get_people()
-    pids = [_[0] for _ in raw_data]
+    ids = [_[0] for _ in raw_data]
 
-    return pids
+    return ids
 
 
-def _format_data(raw_data: [(int, str)]) -> [{str: str}]:
+def _format_data(raw_data: [(int, str)]) -> list:
+    """
+    Format raw data from SQL database into a list of dictionaries.
+
+    :param raw_data: Raw data from the database.
+    :return: A formatted list of dictionaries.
+    """
     formatted = []
     for dat in raw_data:
         formatted_dat = {"id": dat[0], "name": dat[1]}
         formatted.append(formatted_dat)
 
     return formatted
-
-
-def _unformat_data(formatted_data: [{str: str}]) -> [(int, str)]:
-    raw = []
-
-    for dat in formatted_data:
-        raw_dat = [dat[id], dat["name"]]
-        raw.append(raw_dat)
-
-    return raw

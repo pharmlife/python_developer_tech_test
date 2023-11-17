@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, Response
 import database
 import access as database_access
 import input
@@ -56,7 +56,7 @@ def create_person() -> Response:
 @app.route('/person/<int:person_id>', methods=['DELETE'])
 def delete_person(person_id: int) -> Response:
     """
-    Delete a person from the database by person id (pid). Will fail if the provided pid does not already exist.
+    Delete a person from the database by person id. Will fail if the provided pid does not already exist.
 
     :return: A flask.Response indicating if the request was successful.
 
